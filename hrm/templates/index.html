@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Employee Management|Login</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <script type="text/javascript" src="{% static 'js/custom.js'%}"></script>
+
+
+    </head>
+    <body style="background: wheat">
+        <form id = "login-form" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+              <div class="imgcontainer">
+                  <img src="http://localhost:8025/media/pic_folder/amen.png" alt="Avatar" class="avatar">
+{#                  <img src="/static/image/user-group.png" alt="Avatar" class="avatar">#}
+              </div>
+
+              <div class="formarea">
+
+                    {{ form.as_p }}
+                    <div id="wrong"></div>
+                    <button class="btn loginbtn" type="submit">Sign in</button>
+                    <input type="checkbox" checked="checked" id="remember-me"> Remember me
+                    <span class="pwd">Forgot <a href="{% url 'restore-password' %}">password?</a></span>
+              </div>
+
+        </form>
+
+
+    <script>
+    var csrf_input = document.querySelector('[name="csrfmiddlewaretoken"]');
+    var sign_in_button= document.querySelector("button.loginbtn");
+    var username = document.getElementById('id_username');
+    var password = document.getElementById("id_password");
+    sign_in_button.addEventListener('click', login);
+    function login(event) {
+        event.preventDefault();
+        var message_place = document.getElementById("wrong");
+        var url = "{% url 'login' %}";
+        var data =`username=${username.value}&password=${password.value}`;
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+
+                if (this.responseText == '"redirect"'){
+                    window.location = "http://localhost:8025/home/";
+                }
+                else if(this.responseText=='"wrong"') {
+                    message_place.className = "alert alert-danger";
+                    message_place.textContent = "Invalid username or password!"
+
+                }
+                else if (this.responseText=='"invalid"'){
+                    message_place.className = "alert alert-danger"
+                    message_place.textContent = "Try again!"
+                }
+            }
+            }
+        xhttp.open("post", url, true);
+        xhttp.setRequestHeader("X-CSRFToken", csrf_input.value);
+        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        console.log(csrf_input.value)
+        xhttp.send(data);
+
+
+        }
+    </script>
+
+
+    </body>
+
+</html>

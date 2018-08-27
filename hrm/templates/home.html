@@ -1,0 +1,65 @@
+{% extends "base_gen.html" %}
+
+{% block content %}
+    <div class="profile-card">
+        <div class="profile-cover">
+            <div class="profile-avatar">
+                <div class="btns-container">
+                    <div class="profile-links">
+                        <a class="zoom-avatar" href="#"><img src="https://dl.dropboxusercontent.com/s/5liaxzvwbfuqzpo/zoom.png"></a>
+                        <a class="read-more" href="#"><img src="https://dl.dropboxusercontent.com/s/62dfoo9h44o58lw/more.png"></a>
+                        <a class="view-map" href="#"><img src=" https://dl.dropboxusercontent.com/s/9ofmihok0h64lvn/location.png"></a>
+                    </div>
+                </div>
+                {% if user.image_id %}
+                    <a href="#"><img class="avatar profile" src="http://localhost:8000/media/{{ user.image.path }}" alt="{{ user.name }}-avatar" /></a>
+                {% else %}
+                    <a href="#"><img class="avatar profile" src="http://localhost:8000/media/pic_folder/default.png" alt="{{ user.name }}-avatar" /></a>
+                {% endif %}
+            </div>
+            <div class="profile-details">
+                <h1>
+                    {% if user %}
+                        {{ user.name }}
+                    {% endif %}
+
+                    </h1>
+                <h6>{{ user.email }}</h6>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <ul class="features">
+                <li>
+
+                    <a href="{% url 'profile_detail' %}">
+                        <img src="/static/image/user-group.png" class="feature-home" alt="Profile & Account">
+                        <span>Profile & Account</span>
+                    </a>
+               </li>
+
+               <li>
+                   <a href="{% url 'mailbox' %}">
+                       <img src="/static/image/user-group.png" class="feature-home" alt="Check Inbox">
+                       <span>Check Inbox</span>
+                   </a>
+               </li>
+               <li>
+                   <a href="">
+                       <img src="/static/image/user-group.png" class="feature-home" alt="Contact">
+                       <span>Contact</span>
+                   </a>
+               </li>
+            </ul>
+            <div >
+                <div class="contact-icon">
+                    <a href="#" class="contact"><i class="fa fa-dribbble"></i></a>
+                    <a href="#" class="contact"><i class="fa fa-twitter"></i></a>
+                    <a href="#" class="contact"><i class="fa fa-linkedin"></i></a>
+                    <a href="#" class="contact"><i class="fa fa-facebook"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

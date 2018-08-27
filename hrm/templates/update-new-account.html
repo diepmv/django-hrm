@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Employee Management</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <script type="text/javascript" src="{% static 'js/custom.js'%}"></script>
+    </head>
+    <body></body>
+
+        <h2 id = "update-new-account-header" class="form-header update-new-account">Update new account</h2>
+        <form id = "update-new-account" name="updatenewacc" method="post" onsubmit="" class="form">
+            {% csrf_token %}
+            <div class="formarea" id = "formarea">
+<!--<<<<<<< HEAD-->
+                <!--<label><b>Username</b></label>-->
+                <!--<input class="input-lg" type="text" name="username" placeholder="Enter your username" required>-->
+                <!--<label><b>Password</b></label>-->
+                <!--<input class="input-lg" type="password" name="pass" placeholder="Enter your password" required>-->
+                <!--<label><b>Confirm password</b></label>-->
+                <!--<input class="input-lg" type="password" name="pass" placeholder="Retype your password" required>-->
+<!--=======-->
+
+
+
+<!--{#                <label><b>Username</b></label>#}-->
+<!--{#                <input class="input-lg" type="text" name="username" placeholder="Enter your username" required>#}-->
+<!--{#                <label><b>Password</b></label>#}-->
+<!--{#                <input class="input-lg" type="password" name="pass" placeholder="Enter your password" required>#}-->
+<!--{#                <label><b>Confirm password</b></label>#}-->
+<!--{#                <input class="input-lg" type="password" name="pass" placeholder="Retype your password" required>#}-->
+
+
+
+                {{ form.as_p }}
+
+                <input type="submit" class="btn submitbtn" value="Submit">
+            </div>
+        </form>
+    </body>
+</html>

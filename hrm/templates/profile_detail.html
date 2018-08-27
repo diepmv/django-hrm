@@ -1,0 +1,390 @@
+{% extends 'base_gen.html' %}
+{% block content %}
+
+    <div id="content">
+        <!-- start:main content -->
+        <div class="main-content">
+            <ul class="timeline">
+                <!-- start:profile -->
+                <li id="id-profile">
+                    <div class="timeline-badge default"><i class="fa fa-user" data-original-title="" title=""></i></div>
+                    <h1 class="timeline-head">PROFILE</h1>
+                </li>
+                <li id="profile">
+                    <div class="timeline-badge primary"></div>
+                    <div class="timeline-panel">
+                        <h1>Hello, I am <strong>{{ user.name }}</strong></h1>
+                        <h4>{{ position.name }}</h4>
+                        <div class="hr-left"></div>
+
+{#                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod#}
+{#                        tuseror incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,#}
+{#                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo#}
+{#                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse#}
+{#                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non#}
+{#                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>#}
+                        <p>
+                            {{ user.bio }}
+                        </p>
+                    </div>
+                </li>
+                <li id="personal-info">
+                    <div class="timeline-badge primary"></div>
+                    <div class="timeline-panel">
+                        <h1>Personal Info</h1>
+                        <div class="hr-left"></div>
+
+                        <div class="btn-group">
+                            <button type="button" disabled="" class="btn btn-primary">Name</button>
+
+                            <button type="button" disabled="" class="btn btn-default">{{ user.name }}</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" disabled="" class="btn btn-primary">Gender</button>
+                            <button type="button" disabled="" class="btn btn-default">{{ user.gender }}</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" disabled="" class="btn btn-primary">Date Of Birth</button>
+                            <button type="button" disabled="" class="btn btn-default">{{ user.dob }}</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" disabled="" class="btn btn-primary">Email</button>
+                            <button type="button" disabled="" class="btn btn-default">{{ user.email }}</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" disabled="" class="btn btn-primary">Username</button>
+                            <button type="button" disabled="" class="btn btn-default">{{ user.username }}</button>
+
+                        </div>
+                        <div class="btn-update">
+                            <button id="btn-edit" type="button" class="btn btn-warning" onclick="showEditInfoForm()">Edit profile info</button>
+                            <button id ="btn-changepwd" type="button" class="btn btn-danger" onclick="showChangePassForm()">Change pass</button>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- start:editinfo -->
+                <li id="id-editinfo" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Edit profile info</h1>
+                        <div class="hr-left"></div>
+                        <form method="POST"  enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <span>Avatar</span>
+                            <input type="file" name="ava-filechooser" id = "ava-filechooser" >
+{#                            <span name = "temppath" id="temppath"></span><br>#}
+                            <span>Name</span>
+                            <input class="input-lg" type="text" name="full-name" value="{{ user.name }}">
+                            <span>Gender</span><br>
+                            <select name="gender">
+                                <option value="none-selected" selected disabled>Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <br>
+                            <span>Date Of Birth</span>
+                            <input class="input-lg" id="date" name="dOB" placeholder="{{ user.dob }}" type="text"/>
+                            <span>Username</span>
+                             <input class="input-lg" type="text" name="username" placeholder="Enter your username" value="{{ user.username }}">
+                            <span>Email</span>
+                            <input class="input-lg" id="date" name="email" type="text" value ="{{ user.email }}" disabled/>
+                            <br><br>
+                            <input type="submit" name="submit" value="Update">
+                        </form>
+
+
+
+                    </div>
+
+                </li>
+                <!-- end:editinfo -->
+
+                <!-- start:changepass -->
+                <li id="id-changepass">
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Password change</h1>
+                        <div class="hr-left"></div>
+                        {% if messages %}
+                          <ul class="messages">
+                            {% for message in messages %}
+                              <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <span>Current password</span>
+                            <input class="input-lg" type="password" placeholder="Enter your current password" name="old-pass" required>
+                            <span>New password</span>
+                            <input class="input-lg" type="password" name="new-pass1" placeholder="Enter your new password" required>
+                            <span>Confirm new password</span>
+                            <input class="input-lg" type="password" name="new-pass2" placeholder="Retype your new password" required>
+                            <br><br>
+                            <input type="submit" name = "submit" value="Change">
+                        </form>
+                    </div>
+
+                </li>
+                <!-- end:changepass -->
+
+                <li id="personal-relationship">
+                    <div class="timeline-badge primary"></div>
+                    <div class="timeline-panel">
+                        <h1>Relationship</h1>
+                        <div class="hr-left"></div>
+
+                            <table id="table-rela">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Person Name</th>
+                                    <th scope="col">As</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for assoc in user.relationship_assoc%}
+                                    <!--forloop here-->
+                                    <tr id="rela-{{ assoc.id }}" onclick="showUpdateRelaForm()">
+                                        <td>{{ assoc.id }}</td>
+                                        <td>{{ assoc.name }}</td>
+                                        <td>{{ assoc.relationship.name }}</td>
+                                    </tr>
+                                    <!--endfor -->
+
+
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                            <button id="add-rela" onclick="showAddRelaForm()" type="button">+</button>
+                    </div>
+                </li>
+
+
+
+                <!-- start:editRela -->
+                    <li id="id-editrela" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Update personal relationship</h1>
+                        <div class="hr-left"></div>
+                        <form id="update-relationship" method="POST" action="{% url 'update-relationship' %}?id="  enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {{ relationship_form.as_p }}
+                            <br><br>
+                            <input type="submit" name="submit" value="Update">
+                        </form>
+                    </div>
+
+                </li>
+
+                <!-- end:editRela-->
+
+                <!-- start:addRela-->
+                 <li id="id-addrela" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Add new relationship</h1>
+                        <div class="hr-left"></div>
+                        <form method="POST" action="{% url 'add-relationship' %}"  enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ relationship_form.as_p }}
+                            <br><br>
+                            <input type="submit" name="submit" value="Add">
+                        </form>
+                    </div>
+
+                </li>
+                <!-- end:addRela-->
+
+                <!-- end:profile -->
+                <!-- start:resume -->
+                <li id="id-resume">
+                    <div class="timeline-badge default"><i class="fa fa-file" data-original-title="" title=""></i></div>
+                    <h1 class="timeline-head">RESUME</h1>
+                </li>
+
+                <li>
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Skills</h1>
+                        <div class="hr-left"></div>
+                        <ul class="skill-list">
+                        <!-- for loop here -->
+                            {% for user_assoc in user.skill_assoc %}
+                                <li>
+                                    <span onmouseout="skillmouseout(this)" onmouseover="showSkillExp(this)" onclick="showChangeSkillForm()" id = "skill-{{ user_assoc.id }}" class="skillbar-title">{{ user_assoc.skill.name }}</span>
+                                    <br>
+                                    <span style="display: none" id="exp-{{ user_assoc.id }}"></span>
+                                    <span style="display: none" id="start-{{ user_assoc.id }}">{{ user_assoc.start_date }}</span>
+                                    <span style="display: none" id="end-{{ user_assoc.id }}">{{ user_assoc.end_date }}</span>
+                                </li>
+                            {% endfor %}
+                        <!--endloop -->
+                            <li>
+                                <span id="add-skill" onclick="showAddSkillForm()" class="skillbar-title">+</span>
+                            </li>
+
+                        </ul>
+
+                </li>
+                <!-- start:editSkill -->
+                <li id="id-editskill" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Update personal skill</h1>
+                        <div class="hr-left"></div>
+                        <form id="update-skill-form" method="POST"  action="{%  url 'update-skill' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h3 id = "skill-name" name="skill-name"></h3><br>
+                             {{ update_skill_form.as_p }}
+                            <input type="submit" name="submit-update" value="Update">
+                        </form>
+
+
+                    </div>
+
+                </li>
+
+                <!-- end:editSkill-->
+
+                <!-- start:addskill-->
+                 <li id="id-addskill" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Add skill</h1>
+                        <div class="hr-left"></div>
+                        <form method="POST" action="{% url 'add-skill' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ add_skill_form.as_p }}
+                            <input type="submit" name="submit" value="Add">
+                        </form>
+                    </div>
+                </li>
+                <!-- end:addSkill-->
+
+                <!-- start:education -->
+                <li>
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Education</h1>
+                        <div class="hr-left"></div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="timeline">
+                                <ul class="timeline timeline-inverse">
+                                    {% for time in timestamps %}
+                                    <li>
+                                        <i class="fa fa-graduation-cap bg-black"></i>
+                                        <div class="timeline-item" onclick="showChangeEduForm()">
+                                            {% for user_assoc in user.school_assoc %}
+                                                {% if time == user_assoc.start_date %}
+                                                    <h3 class="timeline-header" style="background: indianred" id ="edu-{{ user_assoc.id }}">
+                                                        Join {{ user_assoc.school.name }} on {{ user_assoc.start_date }}</h3>
+
+                                                {% elif time == user_assoc.end_date %}
+                                                    <h3 class="timeline-header" style="background: cornflowerblue" id ="edu-{{ user_assoc.id }}">Get {{ user_assoc.degree_type }} degree at
+                                                    {{ user_assoc.school.name }} on {{ user_assoc.end_date }}</h3>
+                                                {% endif %}
+                                            <span style="display: none" id="edudegree-{{ user_assoc.id }}">{{ user_assoc.degree_type }}</span>
+                                            <span style="display: none" id="edustart-{{ user_assoc.id }}">{{ user_assoc.start_date }}</span>
+                                            <span style="display: none" id="eduend-{{ user_assoc.id }}">{{ user_assoc.end_date }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                    <li>
+                                        <i class="fa fa-plus bg-green"></i>
+                                        <div class="timeline-item">
+                                            <h3 onclick="showAddEduForm()" class="timeline-header add-edu-header">Add more</h3>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+                <!-- end:education -->
+                 <!-- start:editEdu -->
+                <li id="id-editedu" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Update education info</h1>
+                        <div class="hr-left"></div>
+                        <form id="update-edu-form" method="POST"  action="{%  url 'update-edu' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h3 id = "edu-name" name="edu-name"></h3><br>
+                             {{ update_edu_form.as_p }}
+                            <input type="submit" name="submit-update" value="Update">
+                        </form>
+
+
+                    </div>
+
+                </li>
+                <!-- end:editEdu-->
+
+                <!-- start:addskill-->
+                 <li id="id-addedu" >
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Add education info</h1>
+                        <div class="hr-left"></div>
+                        <form method="POST" action="{% url 'add-edu' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ add_edu_form.as_p }}
+                            <input type="submit" name="submit" value="Add">
+                        </form>
+                    </div>
+                </li>
+                <!-- end:addSkill-->
+
+                <!-- start:documents -->
+                <li>
+                    <div class="timeline-badge warning"></div>
+                    <div class="timeline-panel">
+                        <h1>Documents</h1>
+                        <div class="hr-left"></div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="timeline">
+                                <ul class="timeline timeline-inverse">
+
+                                    <li>
+                                        <div class="timeline-item">
+{#                                          <h3 class="timeline-header"><a href="#">Photos</a></h3>#}
+                                          <div class="timeline-body">
+                                              <!--if filetype = image-->
+                                            {% for doc in user.document %}
+                                                {% if doc.is_image %}
+                                                    <a href="http://localhost:8025/media/{{ doc.path }}" data-lightbox="roadtrip"><img  height="100" width="150" src="http://localhost:8025/media/{{ doc.path }}" alt="avatar"></a>
+                                                {% elif doc.is_pdf %}
+                                                    <a href="http://localhost:8025/media/{{ doc.path }}"><img height="100" width="150" src="http://localhost:8025/media/documents/pdf.png" alt="avatar"></a>
+
+                                                {% elif doc.is_doc %}
+                                                    <a href="http://localhost:8025/media/{{ doc.path }}"><img height="100" width="150" src="http://localhost:8025/media/documents/doc.jpg" alt="avatar"></a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <!--else -->
+
+                                          </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                {% csrf_token %}
+                                <input name="document" id="fileInput" type="file" style="display:none;" />
+                                <button class="btn btn-primary btn-lg" id="upload-document" type="file"  onclick="uploadDocument()">Upload Document</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- end:documents -->
+            </ul>
+            <!-- end:resume -->
+        </div>
+    </div>
+{% endblock %}

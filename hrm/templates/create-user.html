@@ -1,0 +1,69 @@
+{% extends 'base_gen.html' %}
+
+{% block content %}
+    <h2 class="form-header create-user">Create new user</h2>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="container">
+
+            {{ form.as_p }}
+
+            <div style="display: none"  id="send-mail-status">{{ message }}</div>
+            <div class="clearfix">
+                <input type="submit" class="btn createbtn" value="Create">
+                <input type="submit" class="btn cancelbtn" value="Cancel" onclick="window.location.href='{% url 'profile_detail' %}'">
+            </div>
+      </div>
+    </form>
+
+
+
+    <script>
+    var email = document.getElementById("id_email");
+    var create_button = document.querySelector("input.createbtn");
+
+    create_button.addEventListener("click", send_post_data);
+
+    function send_post_data(event) {
+        event.preventDefault();
+        var xhttp = new XMLHttpRequest();
+        var data = `email=${email.value}`;
+
+        var url = "{% url 'create-user' %}";
+
+        var success = document.getElementById("send-mail-status");
+        var csrf_input = document.querySelector('[name="csrfmiddlewaretoken"]');
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+
+                if(this.responseText == '"success"'){
+                    success.className = "alert alert-success"
+                    $("#send-mail-status").show()
+                    success.textContent = "Email sent successfully!";
+                }
+
+                else if(this.responseText == '"exist"'){
+                    success.className = "alert alert-danger";
+                    $("#send-mail-status").show()
+                    success.textContent = "That email is taken. Try another.";
+                }
+                else if(this.responseText =='"fail"'){
+                    success.className = "alert alert-danger";
+                    $("#send-mail-status").show()
+                    success.textContent = "The email is not sent to employee, try again!";
+                }
+
+            }
+
+            }
+
+        xhttp.open("post", url, true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("X-CSRFToken", csrf_input.value);
+        xhttp.send(data);
+
+    }
+
+    </script>
+{% endblock %}

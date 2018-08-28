@@ -22,7 +22,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 
 from django.views.decorators.csrf import csrf_exempt
-from pip.compat import console_to_str
+# from pip.compat import console_to_str
 
 from . import forms
 import hashlib
